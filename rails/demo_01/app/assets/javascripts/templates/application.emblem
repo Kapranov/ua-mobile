@@ -1,0 +1,9 @@
+.menu class=controller.menuVisible:visible
+  h3 Назмите на меню
+  ul.nav.affix-top style="margin-top:50px;"
+    li.menu-text click="goToPostsFromMenu"
+      a Почта
+    li.menu-text click="goToRealTimeGraph"
+      a График
+
+= outlet

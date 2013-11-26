@@ -1,0 +1,1 @@
+minispade.register('ember-autosuggest/display_helper', "(function() {var get = Ember.get,\n    set = Ember.set;\n\nEmber.Handlebars.registerBoundHelper('displayHelper', function(searchPath, options) {\n  return new Handlebars.SafeString(get(this, searchPath));\n});\n\n})();\n//@ sourceURL=ember-autosuggest/display_helper");

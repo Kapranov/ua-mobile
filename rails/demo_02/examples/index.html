@@ -1,0 +1,104 @@
+<html>
+<head>
+
+    <title>Ember.Autosuggest</title>
+
+    <link rel="stylesheet" type="text/css" href="styles/default.css" />
+    <link rel="stylesheet" type="text/css" href="styles/autosuggest.css" />
+
+    <script type="text/javascript" src="/lib/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="/lib/handlebars-1.0.0.js"></script>
+    <script type="text/javascript" src="/packages/ember/lib/main.js"></script>
+    <script type="text/javascript" src="/packages/ember-data/lib/main.js"></script>
+
+    <script type="text/javascript" src="/packages/ember-autosuggest/lib/display_helper.js"></script>
+    <script type="text/javascript" src="/packages/ember-autosuggest/lib/template.js"></script>
+    <script type="text/javascript" src="/packages/ember-autosuggest/lib/autosuggest.js"></script>
+    <script type="text/javascript" src="/packages/ember-autosuggest/lib/initializers.js"></script>
+
+    <script type="text/javascript" src="scripts/default.js"></script>
+
+    <script type="text/javascript" src="scripts/model.js"></script>
+    <script type="text/javascript" src="scripts/controller.js"></script>
+    <script type="text/javascript" src="scripts/view.js"></script>
+
+</head>
+<body>
+  <script type="text/x-handlebars">
+      {{outlet}}
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="index">
+    <h1>Demo</h1>
+    <h2>Default</h2>
+    <div class="tags">
+      <label>Tags:</label> {{auto-suggest source=model destination=tags minChars=0}}
+    </div>
+    <pre>
+      <code>
+&#123;&#123;auto-suggest source=model destination=tags minChars=0&#125;&#125;
+      </code>
+    </pre>
+
+    <hr/>
+
+    <h2>filter and search on a different property other than name.</h2>
+    <div class="tags">
+      <label>Cars:</label> {{auto-suggest source=controller.cars destination=controller.carsOwned searchPath="make" minChars=0}}
+    </div>
+    <pre>
+      <code>
+&#123;&#123;auto-suggest source=controller.cars destination=controller.carsOwned searchPath="make" minChars=0&#125;&#125;
+      </code>
+    </pre>
+    <hr/>
+
+    <h2>Use a different template rather than the default.</h2>
+    <div class="tags">
+      <label>Cars:</label> {{#auto-suggest source=controller.employees destination=controller.chosenEmployees searchPath="fullName" minChars=0}}
+                              <img src="img/small_avatar.png" {{bindAttr alt="fullName"}}/>
+                           {{/auto-suggest}}
+    </div>
+    <pre>
+      <code>
+&#123;&#123;#auto-suggest source=controller.employees destination=controller.chosenEmployees searchPath="fullName" minChars=0&#125;&#125;
+  &lt;img src="img/small_avatar.png"&#123;&#123;bindAttr alt="fullName"&#125;&#125;
+&#123;&#123;/auto-suggest&#125;&#125;
+      </code>
+    </pre>
+
+    <hr/>
+
+    <h2>Query an Ember-Data model.</h2>
+    <div class="tags">
+      <label>Cars:</label> {{auto-suggest source=App.Employee destination=controller.dsChosenEmployees searchPath="fullName" minChars=0}}
+    </div>
+    <pre>
+      <code>
+&#123;&#123;auto-suggest source=App.Employee destination=controller.dsChosenEmployees searchPath="fullName" minChars=0&#125;&#125;
+      </code>
+    </pre>
+    <p>This will call findQuery with an expression created from the <b>searchPath</b>.  In the above example, that would be:
+      <pre>
+        <code>
+store.find('employee', {fullName: '&lt;query&gt;'});
+        </code>
+      </pre>
+    <hr/>
+
+    <h2>filter on computed property that returns a promise.</h2>
+    <div class="tags">
+      <label>Cars:</label> {{auto-suggest source=controller.employees destination=controller.chosenEmployees searchPath="fullName" minChars=0}}
+    </div>
+    <pre>
+      <code>
+&#123;&#123;auto-suggest source=controller.employees destination=controller.chosenEmployees searchPath="fullName" minChars=0&#125;&#125;
+      </code>
+    </pre>
+
+    <hr/>
+
+  </script>
+
+</body>
+</html>

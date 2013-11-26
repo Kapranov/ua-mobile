@@ -1,0 +1,1 @@
+minispade.register('ember-autosuggest', "(function() {/**\nEmber Autosuggest\n\n@module ember-autosuggest\n*/\nminispade.require(\"ember-autosuggest/display_helper\");\nminispade.require(\"ember-autosuggest/template\");\nminispade.require(\"ember-autosuggest/autosuggest\");\nminispade.require(\"ember-autosuggest/initializers\");\n\n})();\n//@ sourceURL=ember-autosuggest");

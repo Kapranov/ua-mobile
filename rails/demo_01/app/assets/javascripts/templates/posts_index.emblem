@@ -1,0 +1,21 @@
+header#header.navbar
+  button.btn.btn-link.pull-left.nav-toggle click="toggleMenu"
+    i.icon-reorder.icon-xlarge.text-default.white
+  a.navbar-brand.white UA Mobile
+
+section#content
+  .main
+    .row
+      .col
+        .clearfix
+          h4
+            i.icon-th-list &nbsp;
+            | Сообщения
+        .row-fluid
+            .list-group.m-b-small
+              each post in controller
+                .list-group-item click="goToPost post"
+                  i.icon-chevron-right style="float:right"
+                  i.icon-pencil &nbsp;
+                  = post.title
+

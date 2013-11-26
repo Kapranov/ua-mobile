@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>UA Mobile</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
+</head>
+    <body>
+        <script type="text/x-handlebars" data-template-name="application">
+            {{outlet}}
+        </script>
+
+        <script type="text/x-handlebars" data-template-name="index">
+            {{template "header"}}
+            {{template "home"}}
+            {{template "footer"}}
+        </script>
+
+        <script type="text/x-handlebars" data-template-name="wines">
+            {{template "header"}}
+            {{template "wines-list"}}
+            {{template "footer"}}
+        </script>
+
+        <script type="text/x-handlebars" data-template-name="wine">
+            {{template "header"}}
+            {{template "wine-edit"}}
+            {{template "footer"}}
+        </script>
+
+        <script type="text/x-handlebars" data-template-name="add">
+            {{template "header"}}
+            {{template "wine-new"}}
+            {{template "footer"}}
+        </script>
+
+        <script type="text/x-handlebars" data-template-name="about">
+            {{template "header"}}
+            {{template "about-tpl"}}
+            {{template "footer"}}
+        </script>
+
+
+        <script type="text/x-handlebars" data-template-name="header">
+            <div class="header">
+                <div class="container">
+                    <div class="navbar navbar-inverse navbar-fixed-top" style="z-index: 10;">
+                        <div class="navbar-inner">
+                            <div class="container">
+                                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </a>
+                                <a class="brand" href="#">Вино магазин</a>
+
+                                <div class="nav-collapse collapse">
+                                    <ul class="nav">
+                                        <li class="add-menu"><a href="#/wines">Колекция вин</a></li>
+                                        <li><a href="#/add"><i class="icon-edit icon-white"></i>Добавить</a></li>
+                                    </ul>
+
+                                    <ul class="nav pull-right">
+                                        <li class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ресурсы <b class="caret"></b></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="http://emberjs.org" target="_blank">Ember.js</a></li>
+                                                <li><a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a></li>
+                                                <li class="divider"></li>
+                                                <li class="nav-header">This App</li>
+                                                <li><a href="#" target="_blank">GitHub </a></li>
+                                                <li><a href="http://github.com/kapranov" target="_blank">Автор</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script type="text/x-handlebars" data-template-name="footer">
+            <footer class="footer">
+                <p class="pull-right"><a href="#">Назад</a></p>
+                <p>Приложение разработано с использованием <a href="http://emberjs.com"> Ember</a>
+                    <a href="http://twitter.github.com/bootstrap/">и Twitter Bootstrap</a>
+                    Исходный код выложен на <a href="http://github.com/kapranov/uamobile">на Github</a></p>
+            </footer>
+        </script>
+
+        <script type="text/x-handlebars" data-template-name="home">
+            <div class="home-hero">
+                <h1>Пример Ember App - виномагазин</h1>
+                <h3>Простое приложение с использованием</h3>
+                <h2>Embers & Twitter Bootstrap</h2>
+                <br/>
+                <div style="opacity: .9;">
+                    <a class="btn btn-large" href="#/wines"><img src="img/wine.png" class="pull-left" style="margin-right:6px;"/> Коллекция<br/>Вин</a>
+                    <a class="btn btn-large" href="http://github.com/kapranov">
+                    <img src="img/github.png" class="pull-left" style="margin-right:6px"/> Исходник<br>GitHub</a>
+                </div>
+            </div>
+        </script>
+
+        <script type="text/x-handlebars" data-template-name="wines-list">
+            <div class="container">
+                <div class="row-fluid">
+                    <div id="content" class="span12">
+                        <div>
+                            <ul class="thumbnails">
+                                {{#each item in controller}}
+                                <li class="thumbnail plain" style="text-align:center;">
+                                    {{#linkTo wine item}}
+                                    <img {{bindAttr src="item.newPicture"}} height="150" width="125"/>
+                                    <h5>{{item.name}}</h5>
+                                    {{item.year}} {{item.grapes}}<br/>
+                                    <i class="icon-globe"></i> {{item.region}}, {{item.country}}
+                                    {{/linkTo}}
+                                </li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script type="text/x-handlebars" data-template-name="wine-edit">
+            <div class="container">
+                <div class="row-fluid">
+                    <form class="form-horizontal span12" {{action save on="submit"}}>
+                        <fieldset>
+                            <legend>Wine Details</legend>
+                                <div class="row">
+                                    <div class="span8">
+                                        <div class="control-group">
+                                            <label class="control-label">Name:</label>
+                                            <div class="controls">
+                                                <p>{{view App.RequiredTextField valueBinding="name"}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">Grapes:</label>
+                                            <div class="controls">
+                                                <p>{{view Ember.TextField valueBinding="grapes"}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">Country:</label>
+                                            <div class="controls">
+                                                <p>{{view Ember.TextField valueBinding="country"}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">Region:</label>
+                                            <div class="controls">
+                                                <p>{{view Ember.TextField valueBinding="region"}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">Year:</label>
+                                            <div class="controls">
+                                                <p>{{view Ember.TextField valueBinding="year"}}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="control-group">
+                                            <label class="control-label">Notes:</label>
+                                            <div class="controls">
+                                                <p>{{view Ember.TextArea valueBinding="description"}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span4">
+                                        <div class="well" style="width: 180px;text-align: center;width:50%;margin: 0px auto;">
+                                            <p><img id="picture" {{bindAttr src="newPicture"}} width="180"/></p>
+                                            <p style="color:#999;">To change the picture, drag a new picture from your file system onto the box above.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                                <button class="btn" {{action cancel}}>Cancel</button>
+                                <button class="btn" {{action delete this}}>Delete</button>
+                            </div>
+
+                    </form>
+                </div>
+             </div>
+        </script>
+
+        <script type="text/x-handlebars" data-template-name="wine-new">
+            <div class="container">
+                <div class="row-fluid">
+                    <form class="form-horizontal span12" {{action save on="submit"}}>
+                    <fieldset>
+                        <legend>Wine Details</legend>
+                        <div class="row-fluid">
+                            <div class="row">
+                                <div class="span8">
+                                    <div class="control-group">
+                                        <label class="control-label">Name:</label>
+                                        <div class="controls">
+                                            <p>{{view App.RequiredTextField valueBinding="name" required="true"}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Grapes:</label>
+                                        <div class="controls">
+                                            <p>{{view Ember.TextField valueBinding="grapes"}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Country:</label>
+                                        <div class="controls">
+                                            <p>{{view Ember.TextField valueBinding="country"}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Region:</label>
+                                        <div class="controls">
+                                            <p>{{view Ember.TextField valueBinding="region"}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Year:</label>
+                                        <div class="controls">
+                                            <p>{{view Ember.TextField valueBinding="year"}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">Notes:</label>
+                                        <div class="controls">
+                                            <p>{{view Ember.TextArea valueBinding="description"}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="span4">
+                                    <div class="well" style="width: 180px;text-align: center;width:50%;margin: 0px auto;">
+                                        <p><img id="picture2" {{bindAttr src="newPicture"}} width="180"/></p>
+                                        <p style="color:#999;">To change the picture, drag a new picture from your file system onto the box above.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </fieldset>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button class="btn" {{action cancel}}>Cancel</button>
+                        </div>
+                    </div>
+                 </form>
+            </div>
+        </div>
+     </script>
+
+        <script type="text/x-handlebars" data-template-name="about-tpl">
+            <div class="row-fluid">
+                <div class="span12">
+                    <img class="about-icon" src="img/download.png" width="50">
+                </div>
+            </div>
+            <br/>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <img class="about-icon" src="img/discuss.png" width="50" style="float: left;">
+                </div>
+            </div>
+            <br/>
+            <div class="row-fluid">
+                <div class="span12">
+                    <img class="about-icon" src="img/twitter.png" width="50" style="float: left;">
+                </div>
+            </div>
+            <br/>
+            <div class="row-fluid">
+                <div class="span12">
+                    <img class="about-icon" src="img/blog.png" width="50" style="float: left;">
+                </div>
+            </div>
+        </script>
+
+        <script src="http://use.edgefonts.net/andika.js"></script>
+        <script src="http://use.edgefonts.net/arvo.js"></script>
+
+        <script src="js/libs/jquery-1.9.1.js"></script>
+        <script src="js/libs/handlebars-1.0.0-rc.3.js"></script>
+        <script src="js/libs/ember-1.0.0-rc.2.js"></script>
+        <script src="js/libs/ember-data.js"></script>
+        <script src="js/libs/bootstrap.min.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/router.js"></script>
+        <script src="js/controllers/add_controller.js"></script>
+        <script src="js/controllers/wine_controller.js"></script>
+        <script src="js/controllers/wines_controller.js"></script>
+        <script src="js/models/store.js"></script>
+        <script src="js/models/wine.js"></script>
+        <script src="js/views/required_textfield.js"></script>
+        <script src="js/views/wine_view.js"></script>
+        <script src="js/views/add_view.js"></script>
+
+    </body>
+</html>

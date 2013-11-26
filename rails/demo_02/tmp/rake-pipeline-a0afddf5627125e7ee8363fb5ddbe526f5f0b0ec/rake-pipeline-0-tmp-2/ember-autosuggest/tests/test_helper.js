@@ -1,0 +1,1 @@
+minispade.register('ember-autosuggest/~tests/test_helper', "(function() {String.prototype.normalize = function(){\n  return this.trim().replace(/\\s{2,}/g, ' ');\n};\n\n})();\n//@ sourceURL=ember-autosuggest/~tests/test_helper");

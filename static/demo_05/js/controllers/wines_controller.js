@@ -1,0 +1,3 @@
+App.WinesController = Ember.ArrayController.extend({
+    sortProperties: ['name'] // Will sort by...
+});

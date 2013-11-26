@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="iOS Phone.app written in Ember.js" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width; initial-scale=1.0;">
+<meta charset="utf-8">
+<title>iPhone</title>
+  <link rel="stylesheet" href="styles/styles.css">
+  <script type="text/x-handlebars" data-template-name="components/keypad-button">
+  {{number}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="components/keypad">
+  <div class="keypad keypad--top">
+    <div class="row">
+      {{keypad-button number=1 action="numberEntered"}}
+      {{keypad-button number=2 action="numberEntered"}}
+      {{keypad-button number=3 action="numberEntered"}}
+    </div>
+    <div class="row">
+      {{keypad-button number=4 action="numberEntered"}}
+      {{keypad-button number=5 action="numberEntered"}}
+      {{keypad-button number=6 action="numberEntered"}}
+    </div>
+    <div class="row">
+      {{keypad-button number=7 action="numberEntered"}}
+      {{keypad-button number=8 action="numberEntered"}}
+      {{keypad-button number=9 action="numberEntered"}}
+    </div>
+    <div class="row">
+      {{keypad-button number="*" action="numberEntered"}}
+      {{keypad-button number=0 action="numberEntered"}}
+      {{keypad-button number="#" action="numberEntered"}}
+    </div>
+  </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="call/new">
+  <div class="entry">
+    <span class="phone-entry">{{phoneNumber}}</span>
+    {{#if hasEntries}}
+      <button class="backspace" {{action removeNumber}}><-</button>
+      <div class="row">
+        <button class="add-contacts" {{action addToContacts}}>+ Add to Contacts</button>
+      </div>
+    {{/if}}
+  </div>
+  {{keypad action="numberEntered"}}
+  <div class="keypad">
+    <div class="row">
+      <button class="call-button" {{action placeCall}}>Call</button>
+    </div>
+  </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="contact/index">
+  <div class="page-header">
+    <div class="header-actions">
+      <span class="header-action-item header-action-item--left">Groups</span>
+      <span class="header-action-item"><strong>All Contacts</strong></span>
+      <span class="header-action-item header-action-item--right">
+        {{#link-to "contact.new" tagName="button" classNames="add-contact-button"}}+{{/link-to}}
+      </span>
+    </div>
+    <div class="search-container">
+      <form class="form-search">
+        <input type="text" class="search-input" placeholder="Search">
+      </form> 
+    </div>
+  </div>
+
+  <ul class="contact-list">
+    {{#each contact in controller}}
+    <li>
+      {{#link-to "contact.show" contact class="row"}}
+      <span>{{contact.firstName}} <strong>{{contact.lastName}}</strong></span>
+      {{/link-to}}
+    </li>
+    {{/each}}
+  </ul>
+</script>
+
+<script type="text/x-handlebars" data-template-name="contact/show">
+  <div class="page-header">
+    <div class="header-actions">
+      <span class="header-action-item header-action-item--left">
+        {{#link-to "contact.index" classNames="back-link"}}All Contacts{{/link-to}}
+      </span>
+      <span class="header-action-item header-action-item--right">
+        <a href="#">Edit</a>
+      </span>
+    </div>
+  </div>
+
+    <div class="contact-form-container">
+      <div class="contact-inner">
+        <div class="contact-name"><strong>{{firstName}} {{lastName}}</strong></div>
+        {{#if company}}
+        <div class="contact-company">{{company}}</div>
+        {{/if}}
+
+        <div class="phone-container">
+        {{#each number in formattedPhoneNumbers}}
+          <div class="contact-label">{{number.label}}</div>
+          <div class="phone-number">{{number.stringValue}}</div>
+        {{/each}}
+        </div>
+      </div>
+    </div>
+  {{notes}}
+</script>
+
+
+<script type="text/x-handlebars" data-template-name="contact/new">
+  <form {{action "save" on="submit"}}>
+    <div class="page-header">
+      <div class="header-actions">
+        <span class="header-action-item header-action-item--left">
+          <button {{action "cancel"}}>Cancel</button>
+        </span>
+        <span class="header-action-item"><strong>New Contact</strong></span>
+        <span class="header-action-item header-action-item--right">
+          <button class="primary-action">Done</button>
+        </span>
+      </div>
+    </div>
+    <div class="contact-form-container">
+      <div class="row">
+        <div class="contact-photo-input">
+          <span class="add-photo">Add Photo</span>
+        </div>
+        <div class="contact-info-inputs">
+          {{input type="text" value=firstName placeholder="First"}}
+          {{input type="text" value=lastName placeholder="Last"}}
+          {{input type="text" value=company placeholder="Company"}}
+        </div>
+      </div>
+
+      <div class="add-phone-container">
+        {{#each number in phoneNumbers}}
+          <div class="phone-input">
+            <div class="phone-input--left">
+              <div class="styled-select">
+                {{select-list value=number.label collection=App.PHONE_NUMBER_LABELS}}
+              </div>
+            </div>
+            <div class="phone-input--right">
+              {{input type="text" value=number.number placeholder="Phone"}}
+            </div>
+          </div>
+        {{/each}}
+        <button class="add-phone-button" {{action "buildPhoneNumber"}}>Add phone</button>
+      </div>
+    </div>
+
+  </form>
+</script>
+
+<script type="text/x-handlebars" data-template-name="components/select-list">
+  {{#each item in collection}}
+    <option {{bind-attr value=item}}>{{item}}</option>
+  {{/each}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="application">
+  <div class="main-window">
+    {{outlet}}
+    <div class="tab-bar">
+      <div class="row">
+        <span class="tab-bar-item tab-bar-item--favorites"><img src="http://files.densitypop.com/ember-phone/favorites.png"> Favorites</span>
+        <span class="tab-bar-item tab-bar-item--recents"><img src="http://files.densitypop.com/ember-phone/recents.png"> Recents</span>
+        {{#link-to "contact" classNames="tab-bar-item tab-bar-item--contacts"}}<img src="http://files.densitypop.com/ember-phone/contacts.png"> Contacts{{/link-to}}
+        {{#link-to "call.new" classNames="tab-bar-item tab-bar-item--keypad"}}<img src="http://files.densitypop.com/ember-phone/keypad.png"> Keypad{{/link-to}}
+        <span class="tab-bar-item tab-bar-item--voicemail"><img src="http://files.densitypop.com/ember-phone/voicemail.png"> Voicemail</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>view the source on <a href="http://github.com/kapranov">Github</a></p>
+  </footer>
+</script>
+
+</head>
+<body>
+
+  
+<audio src="http://files.densitypop.com/DTMF-0.mp3" id="dtmf-0" preload="auto"></audio>
+
+<audio src="http://files.densitypop.com/DTMF-1.mp3" id="dtmf-1" preload="auto"></audio>
+
+<audio src="http://files.densitypop.com/DTMF-2.mp3" id="dtmf-2" preload="auto"></audio>
+
+<audio src="http://files.densitypop.com/DTMF-3.mp3" id="dtmf-3" preload="auto"></audio>
+
+<audio src="http://files.densitypop.com/DTMF-4.mp3" id="dtmf-4" preload="auto"></audio>
+
+<audio src="http://files.densitypop.com/DTMF-5.mp3" id="dtmf-5" preload="auto"></audio>
+
+<audio src="http://files.densitypop.com/DTMF-6.mp3" id="dtmf-6" preload="auto"></audio>
+
+<audio src="http://files.densitypop.com/DTMF-7.mp3" id="dtmf-7" preload="auto"></audio>
+
+<audio src="http://files.densitypop.com/DTMF-8.mp3" id="dtmf-8" preload="auto"></audio>
+
+<audio src="http://files.densitypop.com/DTMF-9.mp3" id="dtmf-9" preload="auto"></audio>
+
+  <audio src="http://files.densitypop.com/DTMF-pound.mp3" id="dtmf-pound"></audio>
+  <audio src="http://files.densitypop.com/DTMF-star.mp3" id="dtmf-star"></audio>
+
+
+
+  <header>
+  </header>
+
+  
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="http://builds.emberjs.com/handlebars-1.0.0.js"></script>
+  <script src="http://builds.emberjs.com/tags/v1.1.1/ember.min.js"></script>
+  <script src="http://builds.emberjs.com/beta/ember-data.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+header#header.navbar
+  button.btn.btn-link.pull-left.nav-toggle click="toggleMenu"
+    i.icon-reorder.icon-xlarge.text-default.white
+  a.navbar-brand.white Анимация графика
+
+center.note
+  | Двигайте мышкой по движущей картинке
+
+center
+  = view App.SparklineView
+
+  = partial horribly_sad_brs

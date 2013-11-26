@@ -1,0 +1,23 @@
+header#header.navbar
+  a click="backToPosts"
+    button.btn.btn-link.pull-left.white.header-btn
+      i.icon-chevron-sign-left
+      | Назад
+  a.navbar-brand.white Почта
+
+section#content
+  .main
+    .row
+      .col
+        .clearfix
+          h4
+            i.icon-pencil &nbsp;
+            = title
+          h5
+            = body
+          h4
+            | Комментарий
+          ul
+          each comment in comments
+            li
+              = comment.text

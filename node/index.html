@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/js/vendor/ember-animated-outlet.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+
+    <script src="/js/vendor/jquery-1.9.0.js"></script>
+    <script src="/js/vendor/handlebars-1.0.0-rc.4.js"></script>
+    <script src="/js/vendor/ember-1.0.0-rc.5.js"></script>
+    <script src="/js/vendor/ember-data-0.13.js"></script>
+    <script src="/js/vendor/ember-animated-outlet.js"></script>
+    <script src="/js/app.js"></script>
+    
+    <meta charset=utf-8 />
+    
+    <title>uamobile Ember</title>
+</head>
+<body>
+
+<script data-template-name="application" type="text/x-handlebars">
+    <div class="menu">
+        <div class="title">Ember анимация</div>
+        <ul>
+            <li>{{#linkToAnimated index animations="main:fade"}}Введение{{/linkToAnimated}}</li>
+            <li><a {{action goToInvoices}}>Фабрика</a></li>
+            <li><a {{action goToContacts}}>Контакты</a></li>
+        </ul>
+        <div class="text">анимация с ember:</div>
+        <ul>
+            <li><a {{action goToSlow1}}>Сылка 1</a></li>
+            <li><a {{action goToSlow2}}>Сылка 2</a></li>
+            <li><a {{action goToSlow3}}>Сылка 3</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        {{animatedOutlet name="main"}}
+    </div>
+</script>
+
+<script data-template-name="index" type="text/x-handlebars">
+    <div class="panel-header">Анимация с блоками используя Ember</div>
+    <div class="panel">
+        <p>This is a demo of Ember Animated Outlet. See the source code on GitHub.</p>
+        <p>Clicking any item in the left menu will result in a fade animation.</p>
+        <p>Navigating between invoices and contacts will use the "slide left" effect. Pressing the Back link (currently no support for the browser's back button) will do a "slide right".</p>
+        <p>Ember Animated Outlet is maintained by <a href="http://billysbilling.com/">Billy's Billing accounting software</a>.</p>
+    </div>
+</script>
+
+<script data-template-name="invoices/index" type="text/x-handlebars">
+    <div class="panel-header">Invoices</div>
+    <div class="panel">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Invoice#</th>
+                    <th>Contact</th>
+                    <th style="text-align:right;">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each invoice in controller}}
+                    <tr>
+                        <td><a {{action showInvoice invoice}}>Invoice #{{invoice.no}}</a></td>
+                        <td><a {{action showContact invoice.contact}}>{{invoice.contact.name}}</a></td>
+                        <td style="text-align:right;">${{invoice.amount}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</script>
+
+<script data-template-name="invoices/show" type="text/x-handlebars">
+    <div class="panel-header"><a class="back" {{action goBack}}></a>Invoice #{{no}}</div>
+    <div class="panel">
+        <p>Contact: <a {{action showContact contact}}>{{contact.name}}</a></p>
+        <p>Total amount: ${{amount}}</p>
+    </div>
+</script>
+
+<script data-template-name="contacts/index" type="text/x-handlebars">
+    <div class="panel-header">Contacts</div>
+    <div class="panel">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>State</th>
+                    <th>Country</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each contact in controller}}
+                    <tr>
+                        <td><a {{action showContact contact}}>{{contact.name}}</a></td>
+                        <td>{{contact.state}}</td>
+                        <td>{{contact.country}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</script>
+
+<script data-template-name="contact" type="text/x-handlebars">
+    <div class="panel-header"><a class="back" {{action goBack}}></a>{{name}}</div>
+    <div class="panel-outer">
+        {{animatedOutlet name="contact"}}
+    </div>
+</script>
+
+<script data-template-name="contact/info" type="text/x-handlebars">
+    <button class="btn" {{action showContactInvoices}}>Flip to invoices</button>
+    <h3>Contact info</h3>
+    <address>
+        <strong>{{name}}</strong><br>
+        {{street}}<br>
+        {{city}}, {{state}} {{zipcode}}<br>
+        {{country}}
+    </address>
+</script>
+
+<script data-template-name="contact/invoices" type="text/x-handlebars">
+    <button class="btn" {{action showContactInfo}}>Flip to contact info</button>
+    <h3>Invoices for {{name}}</h3>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Invoice#</th>
+            <th style="text-align:right;">Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+            {{#each invoice in invoices}}
+                <tr>
+                    <td><a {{action showInvoice invoice}}>Invoice #{{invoice.no}}</a></td>
+                    <td style="text-align:right;">${{invoice.amount}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</script>
+
+<script data-template-name="slow1" type="text/x-handlebars">
+    <div class="panel-header">Slow 1</div>
+    <div class="panel">
+        <div style="font-size:100px; line-height:1.2em;">
+            1 1 1 1 1 1 1
+        </div>
+        {{partial "slow_explanation"}}
+    </div>
+</script>
+
+<script data-template-name="slow2" type="text/x-handlebars">
+    <div class="panel-header">Slow 2</div>
+    <div class="panel">
+        <div style="font-size:100px; line-height:1.2em;">
+            2 2 2 2 2 2 2
+        </div>
+        {{partial "slow_explanation"}}
+    </div>
+</script>
+
+<script data-template-name="slow3" type="text/x-handlebars">
+    <div class="panel-header">Slow 3</div>
+    <div class="panel">
+        <div style="font-size:100px; line-height:1.2em;">
+            3 3 3 3 3 3 3
+        </div>
+        {{partial "slow_explanation"}}
+    </div>
+</script>
+
+<script data-template-name="_slow_explanation" type="text/x-handlebars">
+    <p>These three "slow" menu items show how Ember Animated Outlet handles route transitions that occur while an animation is in progress.</p>
+    <p>When an animation is enqueued we first check to see if another animation is in progress. If not, we just start the animation as normally.</p>
+    <p>If an animation is already in progress we simply queue the next animation. The route transition still happened, i.e. the URL updates instantly.</p>
+    <p>If a second route transition occurs before the first animation has finished, we cancel the first route transition, and queue the second route transition instead.</p>
+    <p>The result is that the URL changes every time (and instantly) when the router transitions. But only the last queued animation's view will ever be visible.</p>
+    <p>Some positive side effects of this:</p>
+    <ul>
+        <li>You can build your routes just like normal. No extra work to support animation.</li>
+        <li>You don't need to handle events where the user interacts with the UI while it's animating in a special way.</li>
+        <li>There is no intermediate route/state between the old route and the new route.</li>
+        <li>The UI is never blocked.</li>
+        <li>The user will never have to wait for more than two animations to finish (the active one, and a single queued one).</li>
+    </ul>
+</script>
+
+</body>
+</html>
